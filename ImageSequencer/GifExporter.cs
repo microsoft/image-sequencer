@@ -12,6 +12,7 @@ using System.IO;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using Nokia.InteropServices.WindowsRuntime;
+using System.Threading;
 
 namespace ImageSequencer
 {

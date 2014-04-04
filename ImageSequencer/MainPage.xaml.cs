@@ -42,8 +42,6 @@ namespace ImageSequencer
 
         private RectangleGeometry _animatedArea;
 
-        private Semaphore _semaphore = new Semaphore(1, 1);
-
         // Constructor
         public MainPage()
         {
@@ -188,7 +186,7 @@ namespace ImageSequencer
                     Uri uri = new Uri(@"Assets/Sequences/sequence." + sequenceId + "." + i + ".jpg", UriKind.Relative);
                     Stream stream = Application.GetResourceStream(uri).Stream;
                     StreamImageSource sis = new StreamImageSource(stream);
-                    imageProviders.Add(new StreamImageSource(stream));
+                    imageProviders.Add(new StreamImageSource(stream));                    
                     i++;
                 }
             }
@@ -202,7 +200,7 @@ namespace ImageSequencer
 
         private void AnimationTimer_Tick(object sender, EventArgs eventArgs)
         {
-            RenderForeground(_onScreenImageProviders[_animationIndex]);   
+            RenderForeground(_onScreenImageProviders[_animationIndex]);
              
             if (_animationIndex == (_onScreenImageProviders.Count() - 1))
             {
@@ -216,7 +214,7 @@ namespace ImageSequencer
 
         private async void RenderForeground(IImageProvider imageProvider)
         {
-            if (!_rendering && _semaphore.WaitOne(100))
+            if (!_rendering)
             {
                 _rendering = true;
 
@@ -226,7 +224,6 @@ namespace ImageSequencer
                 }
 
                 _rendering = false;
-                _semaphore.Release();
             }
         }
 
@@ -294,16 +291,14 @@ namespace ImageSequencer
         private async void SaveButton_Click(object sender, EventArgs e)        
         {
             _rendering = true;
-            Stop();
-
-            PhoneApplicationPage context = this;
-            SetControlsEnabled(false);            
 
             bool resumePlaybackAfterSave = _animationTimer.IsEnabled;
 
-            ShowProgressIndicator("Saving");
+            Stop();
 
-            _semaphore.WaitOne();
+            SetControlsEnabled(false);            
+
+            ShowProgressIndicator("Saving");
 
             if (_frameEnabled)
             {
@@ -313,8 +308,6 @@ namespace ImageSequencer
             {
                 await GifExporter.Export(_onScreenImageProviders, null);
             }
-
-            _semaphore.Release();
 
             HideProgressIndicator();
 
