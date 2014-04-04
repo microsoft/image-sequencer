@@ -87,7 +87,7 @@ Downloads
 
 | Project | Release | Download |
 | ------- | --------| -------- |
-| Image Sequencer | v1.0 | [image-sequencer-1.0.zip](https://github.com/nokia-developer/image-sequencer/archive/v1.0.zip) |
+| Image Sequencer | v1.0 | [image-sequencer-1.0.zip](https://github.com/nokia-developer/image-sequencer/archive/1.0.zip) |
 
 
 Version history
