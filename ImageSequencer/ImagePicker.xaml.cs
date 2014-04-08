@@ -81,6 +81,12 @@ namespace ImageSequencer
             NavigationService.Navigate(new Uri("/MainPage.xaml?sequenceId=" + sequenceId, UriKind.Relative));
         }
 
+        public void Gif_Tap(object sender, EventArgs e)
+        {
+            GifThumbnail thumbnail = (sender as StackPanel).DataContext as GifThumbnail;
+            NavigationService.Navigate(new Uri("/GifViewer.xaml?imageUri=" + thumbnail.FileName, UriKind.Relative));
+        }
+
         public void About_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));

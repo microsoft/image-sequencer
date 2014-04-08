@@ -55,7 +55,7 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel>
+                                <StackPanel Tap="Gif_Tap">
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu>
                                             <toolkit:MenuItem Click="Delete_Click" Header="{Binding Path=LocalizedResources.ImagePickerPage_MenuItem_Delete, Source={StaticResource LocalizedStrings}}" />
