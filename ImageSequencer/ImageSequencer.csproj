@@ -27,6 +27,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>06b49207</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -225,9 +226,9 @@
       <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nokia.Graphics.Imaging.Managed, Version=1.2.99.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nokia.Graphics.Imaging.Managed, Version=1.2.114.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NokiaImagingSDK.1.2.99\lib\wp8\Nokia.Graphics.Imaging.Managed.dll</HintPath>
+      <HintPath>..\packages\NokiaImagingSDK.1.2.114-beta\lib\wp8\Nokia.Graphics.Imaging.Managed.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
@@ -240,11 +241,11 @@
   </Target>
   -->
   <ProjectExtensions />
-  <Import Project="..\packages\NokiaImagingSDK.1.2.99\build\wp8\NokiaImagingSDK.targets" Condition="Exists('..\packages\NokiaImagingSDK.1.2.99\build\wp8\NokiaImagingSDK.targets')" />
+  <Import Project="..\packages\NokiaImagingSDK.1.2.114-beta\build\wp8\NokiaImagingSDK.targets" Condition="Exists('..\packages\NokiaImagingSDK.1.2.114-beta\build\wp8\NokiaImagingSDK.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\NokiaImagingSDK.1.2.99\build\wp8\NokiaImagingSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NokiaImagingSDK.1.2.99\build\wp8\NokiaImagingSDK.targets'))" />
+    <Error Condition="!Exists('..\packages\NokiaImagingSDK.1.2.114-beta\build\wp8\NokiaImagingSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NokiaImagingSDK.1.2.114-beta\build\wp8\NokiaImagingSDK.targets'))" />
   </Target>
 </Project>
