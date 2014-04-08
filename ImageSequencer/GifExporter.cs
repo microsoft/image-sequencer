@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using Nokia.InteropServices.WindowsRuntime;
 using System.Threading;
+using Windows.Storage;
 
 namespace ImageSequencer
 {
@@ -28,7 +29,7 @@ namespace ImageSequencer
             IReadOnlyList<IImageProvider> gifRendererSources;
             if (animatedArea.HasValue)
             {
-                gifRendererSources = await CreateFramedAnimation(images, animatedArea.Value, w, h);
+                gifRendererSources = CreateFramedAnimation(images, animatedArea.Value, w, h);
             }
             else
             {
@@ -52,44 +53,46 @@ namespace ImageSequencer
                     bufferStream.Dispose();
                     file.Flush();
                 }
+
             }
         }
 
-        private static async Task<IReadOnlyList<IImageProvider>> CreateFramedAnimation(IReadOnlyList<IImageProvider> images, Rect animationBounds, int w, int h)
+        private static IReadOnlyList<IImageProvider> CreateFramedAnimation(IReadOnlyList<IImageProvider> images, Rect animationBounds, int w, int h)
         {
             List<IImageProvider> framedAnimation = new List<IImageProvider>();
 
-            WriteableBitmap frameBitmap = new WriteableBitmap(w, h);            
+            WriteableBitmap maskBitmap = new WriteableBitmap(w, h);
 
-            using (WriteableBitmapRenderer wbr = new WriteableBitmapRenderer())
+            var backgroundRectangle = new Rectangle
             {
-                foreach (IImageProvider frame in images)
-                {
-                    // Render background
-                    WriteableBitmap backgroundBitmap = new WriteableBitmap(w, h);
-                    wbr.Source = images[0];
-                    wbr.WriteableBitmap = backgroundBitmap;
-                    await wbr.RenderAsync();
+                Fill = new SolidColorBrush(Colors.Black),
+                Width = w,
+                Height = h,
+            };
 
-                    if (frame != images[0])
-                    {
-                        // Render foreground
-                        wbr.Source = frame;
-                        wbr.WriteableBitmap = frameBitmap;
-                        await wbr.RenderAsync();
+            maskBitmap.Render(backgroundRectangle, new TranslateTransform());
 
-                        for (int y = (int)animationBounds.Y; y < ((int)animationBounds.Y + (int)animationBounds.Height); y++)
-                        {
-                            Array.Copy(frameBitmap.Pixels,
-                                (int)animationBounds.X + (y * w),
-                                backgroundBitmap.Pixels,
-                                (int)animationBounds.X + (y * w),
-                                (int)animationBounds.Width);
-                        }
-                    }
+            var foregroundRectangle = new Rectangle
+            {
+                Fill = new SolidColorBrush(Colors.White),
+                Width = animationBounds.Width,
+                Height = animationBounds.Height,
+            };
 
-                    framedAnimation.Add(new BitmapImageSource(backgroundBitmap.AsBitmap()));
-                }
+            TranslateTransform foregroundTranslate = new TranslateTransform();
+            foregroundTranslate.X = animationBounds.X;
+            foregroundTranslate.Y = animationBounds.Y;
+            maskBitmap.Render(foregroundRectangle, foregroundTranslate);
+            maskBitmap.Invalidate();
+
+            foreach (IImageProvider frame in images)
+            {
+                FilterEffect filterEffect = new FilterEffect(images[0]);
+
+                ImageFusionFilter imageFusionFilter = new ImageFusionFilter(frame, new BitmapImageSource(maskBitmap.AsBitmap()), false);
+
+                filterEffect.Filters = new List<IFilter>() { imageFusionFilter };
+                framedAnimation.Add(filterEffect);
             }
 
             return framedAnimation;
