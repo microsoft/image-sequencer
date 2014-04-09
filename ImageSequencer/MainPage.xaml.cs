@@ -37,6 +37,7 @@ namespace ImageSequencer
         private int _animationIndex = 0;
         private DispatcherTimer _animationTimer;
         private volatile bool _rendering;
+        private volatile bool _saveAfterRender;
 
         private Point _dragStart;
 
@@ -225,6 +226,12 @@ namespace ImageSequencer
 
                 _rendering = false;
             }
+
+            if (_saveAfterRender)
+            {
+                _saveAfterRender = false;
+                Save();
+            }
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
@@ -288,15 +295,23 @@ namespace ImageSequencer
             RenderForeground(_onScreenImageProviders[_animationIndex]);
         }
 
-        private async void SaveButton_Click(object sender, EventArgs e)        
+        private void SaveButton_Click(object sender, EventArgs e)        
         {
-            _rendering = true;
+            _saveAfterRender = _rendering;
 
+            if (!_saveAfterRender)
+            {
+                Save();
+            }
+        }
+
+        private async void Save()
+        {
             bool resumePlaybackAfterSave = _animationTimer.IsEnabled;
 
             Stop();
 
-            SetControlsEnabled(false);            
+            SetControlsEnabled(false);
 
             ShowProgressIndicator("Saving");
 
