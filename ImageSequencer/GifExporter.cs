@@ -38,22 +38,18 @@ namespace ImageSequencer
 
             using (GifRenderer gifRenderer = new GifRenderer())
             {
-                gifRenderer.Size = new Windows.Foundation.Size(w, h);
                 gifRenderer.Duration = 100;
                 gifRenderer.NumberOfAnimationLoops = 10000;
                 gifRenderer.Sources = gifRendererSources;
 
                 var buffer = await gifRenderer.RenderAsync();
 
-                using (IsolatedStorageFileStream file = IsolatedStorageFile.GetUserStoreForApplication().CreateFile("exported." + GetFileNameRunningNumber() + ".gif"))
+                var filename = "ImageSequencer." + (await GetFileNameRunningNumber()) + ".gif";
+                var storageFile = await KnownFolders.PicturesLibrary.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                using (var stream = await storageFile.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    Stream bufferStream = buffer.AsStream();
-                    bufferStream.CopyTo(file);
-                    bufferStream.Close();
-                    bufferStream.Dispose();
-                    file.Flush();
+                    await stream.WriteAsync(buffer);
                 }
-
             }
         }
 
@@ -89,24 +85,29 @@ namespace ImageSequencer
             {
                 FilterEffect filterEffect = new FilterEffect(images[0]);
 
-                ImageFusionFilter imageFusionFilter = new ImageFusionFilter(frame, new BitmapImageSource(maskBitmap.AsBitmap()), false);
+                BlendFilter blendFilter = new BlendFilter(frame, BlendFunction.Normal, 1.0);
+                blendFilter.MaskSource = new BitmapImageSource(maskBitmap.AsBitmap());
 
-                filterEffect.Filters = new List<IFilter>() { imageFusionFilter };
+                filterEffect.Filters = new List<IFilter>() { blendFilter };
                 framedAnimation.Add(filterEffect);
             }
 
             return framedAnimation;
         }
 
-        private static int GetFileNameRunningNumber()
+        private static async Task<int> GetFileNameRunningNumber()
         {
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-            String[] filenames = store.GetFileNames();
+            var files = await KnownFolders.PicturesLibrary.GetFilesAsync();
             int max = 0;
-            foreach (String filename in filenames)
+            foreach (StorageFile storageFile in files)
             {
-                max = Math.Max(max, Convert.ToInt32(filename.Split('.')[1]));
+                var pattern = "ImageSequencer\\.\\d+\\.gif";
+                if (System.Text.RegularExpressions.Regex.IsMatch(storageFile.Name, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                {
+                    max = Math.Max(max, Convert.ToInt32(storageFile.Name.Split('.')[1]));
+                }
             }
+
             return max + 1;
         }
 

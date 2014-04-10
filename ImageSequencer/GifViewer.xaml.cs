@@ -12,6 +12,7 @@ using System.IO.IsolatedStorage;
 using System.IO;
 using ImageTools.IO;
 using ImageTools.IO.Gif;
+using Windows.Storage;
 
 namespace ImageSequencer
 {
@@ -34,21 +35,21 @@ namespace ImageSequencer
             {
                 FilenameText.Text = imageFileName;
 
-                using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(imageFileName, System.IO.FileMode.Open, IsolatedStorageFile.GetUserStoreForApplication()))
-                {
-                    // Allocate an array large enough for the entire file 
-                    byte[] data = new byte[stream.Length];
-                    // Read the entire file and then close it 
-                    stream.Read(data, 0, data.Length);
-                    stream.Close(); 
-
-                    ExtendedImage image = new ExtendedImage();
-                    image.LoadingCompleted +=
-                        (o, ea) => Dispatcher.BeginInvoke(() => { AnimatedImage.Source = image; });
-
-                    image.SetSource(new MemoryStream(data));
-                }
+                LoadImage(imageFileName);
             }
+        }
+
+        public async void LoadImage(String filename)
+        {
+
+            var file = await KnownFolders.PicturesLibrary.GetFileAsync(filename);
+
+                ExtendedImage image = new ExtendedImage();
+                image.LoadingCompleted +=
+                    (o, ea) => Dispatcher.BeginInvoke(() => { AnimatedImage.Source = image; });
+
+                image.SetSource((await file.OpenReadAsync()).AsStreamForRead());
+ 
         }
 
         public void About_Click(object sender, EventArgs e)
@@ -56,10 +57,10 @@ namespace ImageSequencer
             NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
         }
 
-        public void Delete_Click(object sender, EventArgs e)
+        public async void Delete_Click(object sender, EventArgs e)
         {
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-            store.DeleteFile(imageFileName);
+            var storageFile = await KnownFolders.PicturesLibrary.GetFileAsync(imageFileName);
+            await storageFile.DeleteAsync();
             NavigationService.GoBack();
         }
     }

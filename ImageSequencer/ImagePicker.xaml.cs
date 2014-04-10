@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using System.IO;
+using Windows.Storage;
 
 namespace ImageSequencer
 {
@@ -44,22 +45,22 @@ namespace ImageSequencer
             };
         }
 
-        private void PopulateGifs()
+        private async void PopulateGifs()
         {
             Gifs.Clear();
 
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-            String[] fileNames = store.GetFileNames();
-
-            foreach (String filename in fileNames)
+            var files = await KnownFolders.PicturesLibrary.GetFilesAsync();
+            foreach (StorageFile storageFile in files)
             {
-                using (var sourceFile = store.OpenFile(filename, FileMode.Open, FileAccess.Read))
+                var pattern = "ImageSequencer\\.\\d+\\.gif";
+                if (System.Text.RegularExpressions.Regex.IsMatch(storageFile.Name, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
                 {
+                    var stream = (await storageFile.OpenReadAsync()).AsStreamForRead();
                     BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.SetSource(sourceFile);
+                    bitmapImage.SetSource(stream);
                     GifThumbnail gifThumbnail = new GifThumbnail();
                     gifThumbnail.BitmapImage = bitmapImage;
-                    gifThumbnail.FileName = filename;
+                    gifThumbnail.FileName = storageFile.Name;
                     Gifs.Add(gifThumbnail);
                 }
             }
@@ -92,10 +93,11 @@ namespace ImageSequencer
             NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
         }
 
-        public void Delete_Click(object sender, EventArgs e)
+        public async void Delete_Click(object sender, EventArgs e)
         {
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-            store.DeleteFile(((sender as MenuItem).DataContext as GifThumbnail).FileName);
+            var filename = ((sender as MenuItem).DataContext as GifThumbnail).FileName;
+            var storageFile = await KnownFolders.PicturesLibrary.GetFileAsync(filename);
+            await storageFile.DeleteAsync();
             PopulateGifs();
         }
 

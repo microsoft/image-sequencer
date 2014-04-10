@@ -335,7 +335,6 @@ namespace ImageSequencer
 
             HideProgressIndicator();
 
-            _rendering = false;
             if (resumePlaybackAfterSave)
             {
                 Play();
