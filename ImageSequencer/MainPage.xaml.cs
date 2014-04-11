@@ -279,6 +279,8 @@ namespace ImageSequencer
             }
 
             await Render(_animationIndex, true);
+
+            _saveButton.IsEnabled = true;
         }
 
         private async void FrameButton_Click(object sender, EventArgs e)
@@ -298,6 +300,8 @@ namespace ImageSequencer
             }
 
             await Render(_animationIndex, true);
+
+            _saveButton.IsEnabled = true;
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -338,6 +342,7 @@ namespace ImageSequencer
             }
 
             SetControlsEnabled(true);
+            _saveButton.IsEnabled = false;
         }
 
         private void ShowProgressIndicator(String text)
@@ -380,6 +385,8 @@ namespace ImageSequencer
                 AnimatedAreaIndicator.Height = rect.Height;
 
                 _animatedArea.Rect = rect;
+
+                _saveButton.IsEnabled = true;
             }
         }
 
