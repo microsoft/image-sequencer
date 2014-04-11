@@ -29,7 +29,8 @@ namespace ImageSequencer
         private IReadOnlyList<IImageProvider> _alignedImageProviders;
         private IReadOnlyList<IImageProvider> _onScreenImageProviders;
 
-        private WriteableBitmap _onScreenImage;
+        private WriteableBitmap _backgroundImage;
+        private WriteableBitmap _foregroundImage;
 
         private bool _alignEnabled;
         private bool _frameEnabled;
@@ -48,7 +49,7 @@ namespace ImageSequencer
         {
             InitializeComponent();
             InitializeApplicationBar();
-            
+
             _animationTimer = new DispatcherTimer();
             _animationTimer.Tick += AnimationTimer_Tick;
             _animationTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
@@ -84,13 +85,13 @@ namespace ImageSequencer
 
             _playButton = new ApplicationBarIconButton();
             _playButton.IconUri = new Uri("/Assets/appbar.play.png", UriKind.Relative);
-            _playButton.Text = "play";            
+            _playButton.Text = "play";
             _playButton.Click += new EventHandler(PlayButton_Click);
             ApplicationBar.Buttons.Add(_playButton);
 
             _alignButton = new ApplicationBarIconButton();
             _alignButton.IconUri = new Uri(@"Assets/appbar.align.disabled.png", UriKind.Relative);
-            _alignButton.Text = "align";            
+            _alignButton.Text = "align";
             _alignButton.Click += new EventHandler(AlignButton_Click);
             ApplicationBar.Buttons.Add(_alignButton);
 
@@ -144,16 +145,11 @@ namespace ImageSequencer
             int width = (int)info.ImageSize.Width;
             int height = (int)info.ImageSize.Height;
 
-            _onScreenImage = new WriteableBitmap(width, height);
+            _foregroundImage = new WriteableBitmap(width, height);
+            _backgroundImage = new WriteableBitmap(width, height);
 
             // Render the first frame of sequence
-            using (WriteableBitmapRenderer writeableBitmapRenderer = new WriteableBitmapRenderer(imageProvider, _onScreenImage))
-            {
-                ImageElement.Source = await writeableBitmapRenderer.RenderAsync();
-                writeableBitmapRenderer.Source = imageProvider;
-                writeableBitmapRenderer.WriteableBitmap = new WriteableBitmap(width, height);
-                ImageElementBackground.Source = await writeableBitmapRenderer.RenderAsync();
-            }
+            await Render(0, true);
 
             InitializeAnimatedAreaBasedOnImageDimensions(width, height);
 
@@ -172,7 +168,7 @@ namespace ImageSequencer
                 Canvas.SetLeft(AnimatedAreaIndicator, offset);
                 Canvas.SetTop(AnimatedAreaIndicator, offset);
                 _animatedArea.Rect = new Rect(0, 0, imageWidth, imageHeight);
-            }        
+            }
         }
 
         private List<IImageProvider> CreateImageSequenceFromResources(int sequenceId)
@@ -187,7 +183,7 @@ namespace ImageSequencer
                     Uri uri = new Uri(@"Assets/Sequences/sequence." + sequenceId + "." + i + ".jpg", UriKind.Relative);
                     Stream stream = Application.GetResourceStream(uri).Stream;
                     StreamImageSource sis = new StreamImageSource(stream);
-                    imageProviders.Add(new StreamImageSource(stream));                    
+                    imageProviders.Add(new StreamImageSource(stream));
                     i++;
                 }
             }
@@ -199,10 +195,10 @@ namespace ImageSequencer
             return imageProviders;
         }
 
-        private void AnimationTimer_Tick(object sender, EventArgs eventArgs)
+        private async void AnimationTimer_Tick(object sender, EventArgs eventArgs)
         {
-            RenderForeground(_onScreenImageProviders[_animationIndex]);
-             
+            await Render(_animationIndex);
+
             if (_animationIndex == (_onScreenImageProviders.Count() - 1))
             {
                 _animationIndex = 0;
@@ -213,15 +209,23 @@ namespace ImageSequencer
             }
         }
 
-        private async void RenderForeground(IImageProvider imageProvider)
+        private async Task Render(int animationIndex, bool refreshBackground = false)
         {
             if (!_rendering)
             {
                 _rendering = true;
 
-                using (WriteableBitmapRenderer writeableBitmapRenderer = new WriteableBitmapRenderer(imageProvider, _onScreenImage))
+                using (WriteableBitmapRenderer writeableBitmapRenderer = new WriteableBitmapRenderer(_onScreenImageProviders[animationIndex], _foregroundImage))
                 {
                     ImageElement.Source = await writeableBitmapRenderer.RenderAsync();
+                }
+
+                if (refreshBackground && animationIndex != 0)
+                {
+                    using (WriteableBitmapRenderer writeableBitmapRenderer = new WriteableBitmapRenderer(_onScreenImageProviders[0], _backgroundImage))
+                    {
+                        ImageElementBackground.Source = await writeableBitmapRenderer.RenderAsync();
+                    }
                 }
 
                 _rendering = false;
@@ -232,6 +236,7 @@ namespace ImageSequencer
                 _saveAfterRender = false;
                 Save();
             }
+
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
@@ -258,7 +263,7 @@ namespace ImageSequencer
             _playButton.IconUri = new Uri(@"Assets/appbar.pause.png", UriKind.Relative);
         }
 
-        private void AlignButton_Click(object sender, EventArgs e)
+        private async void AlignButton_Click(object sender, EventArgs e)
         {
             _alignEnabled = !_alignEnabled;
 
@@ -273,10 +278,10 @@ namespace ImageSequencer
                 _alignButton.IconUri = new Uri(@"Assets/appbar.align.disabled.png", UriKind.Relative);
             }
 
-            RenderForeground(_onScreenImageProviders[_animationIndex]);
+            await Render(_animationIndex, true);
         }
 
-        private void FrameButton_Click(object sender, EventArgs e)
+        private async void FrameButton_Click(object sender, EventArgs e)
         {
             _frameEnabled = !_frameEnabled;
             AnimatedAreaIndicator.Visibility = _frameEnabled ? Visibility.Visible : Visibility.Collapsed;
@@ -292,10 +297,10 @@ namespace ImageSequencer
                 _frameButton.IconUri = new Uri(@"Assets/appbar.frame.enabled.png", UriKind.Relative);
             }
 
-            RenderForeground(_onScreenImageProviders[_animationIndex]);
+            await Render(_animationIndex, true);
         }
 
-        private void SaveButton_Click(object sender, EventArgs e)        
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             _saveAfterRender = _rendering;
 
@@ -357,13 +362,13 @@ namespace ImageSequencer
             {
                 double x0 = Math.Min(e.ManipulationOrigin.X, _dragStart.X);
                 double x1 = Math.Max(e.ManipulationOrigin.X, _dragStart.X);
-                double y0 = Math.Min(e.ManipulationOrigin.Y, _dragStart.Y);                
+                double y0 = Math.Min(e.ManipulationOrigin.Y, _dragStart.Y);
                 double y1 = Math.Max(e.ManipulationOrigin.Y, _dragStart.Y);
 
                 x0 = Math.Max(x0, 0);
-                x1 = Math.Min(x1, _onScreenImage.PixelWidth);
+                x1 = Math.Min(x1, _foregroundImage.PixelWidth);
                 y0 = Math.Max(y0, 0);
-                y1 = Math.Min(y1, _onScreenImage.PixelHeight);
+                y1 = Math.Min(y1, _foregroundImage.PixelHeight);
 
                 double width = x1 - x0;
                 double height = y1 - y0;
