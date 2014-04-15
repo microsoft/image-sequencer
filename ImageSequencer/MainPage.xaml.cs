@@ -220,7 +220,7 @@ namespace ImageSequencer
                     ImageElement.Source = await writeableBitmapRenderer.RenderAsync();
                 }
 
-                if (refreshBackground && animationIndex != 0)
+                if (refreshBackground)
                 {
                     using (WriteableBitmapRenderer writeableBitmapRenderer = new WriteableBitmapRenderer(_onScreenImageProviders[0], _backgroundImage))
                     {
