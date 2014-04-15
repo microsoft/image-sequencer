@@ -84,7 +84,7 @@ namespace ImageSequencer
 
         public void Gif_Tap(object sender, EventArgs e)
         {
-            GifThumbnail thumbnail = (sender as StackPanel).DataContext as GifThumbnail;
+            GifThumbnail thumbnail = (sender as Button).DataContext as GifThumbnail;
             NavigationService.Navigate(new Uri("/GifViewer.xaml?imageUri=" + thumbnail.FileName, UriKind.Relative));
         }
 

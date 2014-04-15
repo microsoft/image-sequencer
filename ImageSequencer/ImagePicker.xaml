@@ -34,13 +34,17 @@
                     <ItemsControl ItemsSource="{Binding Sequences}" Visibility="Visible">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <toolkit:WrapPanel ItemWidth="226" ItemHeight="140"/>
+                                <toolkit:WrapPanel ItemWidth="226" ItemHeight="150"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding}" Tap="Thumbnail_Tap" CacheMode="BitmapCache" Margin="12,12,12,12"/>
+                                <Button BorderThickness="0">
+                                    <Button.Content>
+                                        <Image Source="{Binding}" Tap="Thumbnail_Tap" CacheMode="BitmapCache"/>
+                                    </Button.Content>
+                                </Button>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -49,21 +53,25 @@
                     <ItemsControl ItemsSource="{Binding Gifs}" Visibility="Visible">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <toolkit:WrapPanel ItemWidth="226" ItemHeight="180"/>
+                                <toolkit:WrapPanel ItemWidth="226" ItemHeight="175"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Tap="Gif_Tap">
+                                <Button BorderThickness="0" Tap="Gif_Tap">
+                                    <Button.Content>
+                                        <StackPanel>
+                                            <Image Source="{Binding BitmapImage}" CacheMode="BitmapCache"/>
+                                            <TextBlock Text="{Binding FileName}" FontSize="{StaticResource PhoneFontSizeSmall}" Margin="0,4,0,0" Style="{StaticResource PhoneTextNormalStyle}"/>
+                                        </StackPanel>
+                                    </Button.Content>
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu>
                                             <toolkit:MenuItem Click="Delete_Click" Header="{Binding Path=LocalizedResources.ImagePickerPage_MenuItem_Delete, Source={StaticResource LocalizedStrings}}" />
                                         </toolkit:ContextMenu>
                                     </toolkit:ContextMenuService.ContextMenu>
-                                    <Image Source="{Binding BitmapImage}" CacheMode="BitmapCache" Margin="12,12,12,6"/>
-                                    <TextBlock Text="{Binding FileName}" Margin="12,6,12,12"/>
-                                </StackPanel>
+                                </Button>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
