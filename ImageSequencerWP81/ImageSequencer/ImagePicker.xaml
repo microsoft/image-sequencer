@@ -1,0 +1,93 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="ImageSequencer.ImagePicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>            
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer x:Name="SequencesPanel">
+                <StackPanel>
+                    <TextBlock Text="{Binding Path=LocalizedResources.ImagePickerPage_Heading_Sequences, Source={StaticResource LocalizedStrings}}" Margin="9,12,0,12" Style="{StaticResource PhoneTextTitle2Style}"/>
+                    <ItemsControl ItemsSource="{Binding Sequences}" Visibility="Visible">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <toolkit:WrapPanel ItemWidth="226" ItemHeight="150"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button BorderThickness="0">
+                                    <Button.Content>
+                                        <Image Source="{Binding}" Tap="Thumbnail_Tap" CacheMode="BitmapCache"/>
+                                    </Button.Content>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="{Binding Path=LocalizedResources.ImagePickerPage_Heading_Saved, Source={StaticResource LocalizedStrings}}" Margin="9,12,0,12" Style="{StaticResource PhoneTextTitle2Style}"/>
+                    <ItemsControl ItemsSource="{Binding Gifs}" Visibility="Visible">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <toolkit:WrapPanel ItemWidth="226" ItemHeight="175"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button BorderThickness="0" Tap="Gif_Tap">
+                                    <Button.Content>
+                                        <StackPanel>
+                                            <Image Source="{Binding BitmapImage}" CacheMode="BitmapCache"/>
+                                            <TextBlock Text="{Binding FileName}" FontSize="{StaticResource PhoneFontSizeSmall}" Margin="0,4,0,0" Style="{StaticResource PhoneTextNormalStyle}"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu>
+                                            <toolkit:MenuItem Click="Delete_Click" Header="{Binding Path=LocalizedResources.ImagePickerPage_MenuItem_Delete, Source={StaticResource LocalizedStrings}}" />
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock x:Name="ThereAreNoSavedGifsTextBlock" Text="{Binding Path=LocalizedResources.ImagePickerPage_No_Gifs_Message, Source={StaticResource LocalizedStrings}}" Margin="12,0,0,0" Visibility="Collapsed"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+    
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="about" Click="About_Click"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+    
+</phone:PhoneApplicationPage>
