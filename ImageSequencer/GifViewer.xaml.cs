@@ -41,15 +41,12 @@ namespace ImageSequencer
 
         public async void LoadImage(String filename)
         {
-
             var file = await KnownFolders.PicturesLibrary.GetFileAsync(filename);
 
-                ExtendedImage image = new ExtendedImage();
-                image.LoadingCompleted +=
-                    (o, ea) => Dispatcher.BeginInvoke(() => { AnimatedImage.Source = image; });
-
-                image.SetSource((await file.OpenReadAsync()).AsStreamForRead());
- 
+            ExtendedImage image = new ExtendedImage();
+            image.LoadingCompleted +=
+                (o, ea) => Dispatcher.BeginInvoke(() => { AnimatedImage.Source = image; });
+            image.SetSource((await file.OpenReadAsync()).AsStreamForRead());
         }
 
         public void About_Click(object sender, EventArgs e)
