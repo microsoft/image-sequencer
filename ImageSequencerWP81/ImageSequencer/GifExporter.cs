@@ -1,25 +1,18 @@
 ﻿using Nokia.Graphics.Imaging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.IO.IsolatedStorage;
-using System.IO;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using Nokia.InteropServices.WindowsRuntime;
-using System.Threading;
 using Windows.Storage;
 
 namespace ImageSequencer
 {
     class GifExporter
     {
-
         public static async Task Export(IReadOnlyList<IImageProvider> images, Rect? animatedArea)
         {
             ImageProviderInfo info = await images[0].GetInfoAsync();
@@ -75,9 +68,11 @@ namespace ImageSequencer
                 Height = animationBounds.Height,
             };
 
-            TranslateTransform foregroundTranslate = new TranslateTransform();
-            foregroundTranslate.X = animationBounds.X;
-            foregroundTranslate.Y = animationBounds.Y;
+            TranslateTransform foregroundTranslate = new TranslateTransform
+            {
+                X = animationBounds.X,
+                Y = animationBounds.Y
+            };
             maskBitmap.Render(foregroundRectangle, foregroundTranslate);
             maskBitmap.Invalidate();
 
@@ -85,8 +80,10 @@ namespace ImageSequencer
             {
                 FilterEffect filterEffect = new FilterEffect(images[0]);
 
-                BlendFilter blendFilter = new BlendFilter(frame, BlendFunction.Normal, 1.0);
-                blendFilter.MaskSource = new BitmapImageSource(maskBitmap.AsBitmap());
+                BlendFilter blendFilter = new BlendFilter(frame, BlendFunction.Normal, 1.0)
+                {
+                    MaskSource = new BitmapImageSource(maskBitmap.AsBitmap())
+                };
 
                 filterEffect.Filters = new List<IFilter>() { blendFilter };
                 framedAnimation.Add(filterEffect);
@@ -101,7 +98,7 @@ namespace ImageSequencer
             int max = 0;
             foreach (StorageFile storageFile in files)
             {
-                var pattern = "ImageSequencer\\.\\d+\\.gif";
+                const string pattern = "ImageSequencer\\.\\d+\\.gif";
                 if (System.Text.RegularExpressions.Regex.IsMatch(storageFile.Name, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
                 {
                     max = Math.Max(max, Convert.ToInt32(storageFile.Name.Split('.')[1]));

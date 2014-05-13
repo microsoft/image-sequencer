@@ -27,18 +27,22 @@ namespace ImageSequencer
 
             // Application version number
 
-            var version = XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("Version").Value;
-
-            var versionRun = new Run()
+            var xElement = XDocument.Load("WMAppManifest.xml").Root;
+            if (xElement != null)
             {
-                Text = String.Format(AppResources.AboutPage_VersionRun, version) + "\n"
-            };
+                var version = xElement.Element("App").Attribute("Version").Value;
 
-            VersionParagraph.Inlines.Add(versionRun);
+                var versionRun = new Run
+                {
+                    Text = String.Format(AppResources.AboutPage_VersionRun, version) + "\n"
+                };
+
+                VersionParagraph.Inlines.Add(versionRun);
+            }
 
             // Application about text
 
-            var aboutRun = new Run()
+            var aboutRun = new Run
             {
                 Text = AppResources.AboutPage_AboutRun + "\n"
             };
@@ -48,7 +52,7 @@ namespace ImageSequencer
             // Link to project homepage
 
             var projectRunText = AppResources.AboutPage_ProjectRun;
-            var projectRunTextSpans = projectRunText.Split(new string[] { "{0}" }, StringSplitOptions.None);
+            var projectRunTextSpans = projectRunText.Split(new[] { "{0}" }, StringSplitOptions.None);
 
             var projectRunSpan1 = new Run {Text = projectRunTextSpans[0]};
 
@@ -67,7 +71,7 @@ namespace ImageSequencer
 
         private void ProjectsLink_Click(object sender, RoutedEventArgs e)
         {
-            var webBrowserTask = new WebBrowserTask()
+            var webBrowserTask = new WebBrowserTask
             {
                 Uri = new Uri(AppResources.AboutPage_Hyperlink_Project, UriKind.Absolute)
             };

@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Nokia.Graphics.Imaging;
-using ImageSequencer.Resources;
 using System.Windows.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImageSequencer
@@ -83,32 +80,39 @@ namespace ImageSequencer
         {
             ApplicationBar = new ApplicationBar();
 
-            _playButton = new ApplicationBarIconButton();
-            _playButton.IconUri = new Uri("/Assets/appbar.play.png", UriKind.Relative);
-            _playButton.Text = "play";
-            _playButton.Click += new EventHandler(PlayButton_Click);
+            _playButton = new ApplicationBarIconButton
+            {
+                IconUri = new Uri("/Assets/appbar.play.png", UriKind.Relative),
+                Text = "play"
+            };
+            _playButton.Click += PlayButton_Click;
             ApplicationBar.Buttons.Add(_playButton);
 
-            _alignButton = new ApplicationBarIconButton();
-            _alignButton.IconUri = new Uri(@"Assets/appbar.align.disabled.png", UriKind.Relative);
-            _alignButton.Text = "align";
-            _alignButton.Click += new EventHandler(AlignButton_Click);
+            _alignButton = new ApplicationBarIconButton
+            {
+                IconUri = new Uri(@"Assets/appbar.align.disabled.png", UriKind.Relative),
+                Text = "align"
+            };
+            _alignButton.Click += AlignButton_Click;
             ApplicationBar.Buttons.Add(_alignButton);
 
-            _frameButton = new ApplicationBarIconButton();
-            _frameButton.IconUri = new Uri(@"Assets/appbar.frame.disabled.png", UriKind.Relative);
-            _frameButton.Text = "frame";
-            _frameButton.Click += new EventHandler(FrameButton_Click);
+            _frameButton = new ApplicationBarIconButton
+            {
+                IconUri = new Uri(@"Assets/appbar.frame.disabled.png", UriKind.Relative),
+                Text = "frame"
+            };
+            _frameButton.Click += FrameButton_Click;
             ApplicationBar.Buttons.Add(_frameButton);
 
-            _saveButton = new ApplicationBarIconButton();
-            _saveButton.IconUri = new Uri(@"Assets/appbar.save.png", UriKind.Relative);
-            _saveButton.Text = "save";
-            _saveButton.Click += new EventHandler(SaveButton_Click);
+            _saveButton = new ApplicationBarIconButton
+            {
+                IconUri = new Uri(@"Assets/appbar.save.png", UriKind.Relative),
+                Text = "save"
+            };
+            _saveButton.Click += SaveButton_Click;
             ApplicationBar.Buttons.Add(_saveButton);
 
-            ApplicationBarMenuItem aboutMenuItem = new ApplicationBarMenuItem();
-            aboutMenuItem.Text = "about";
+            var aboutMenuItem = new ApplicationBarMenuItem {Text = "about"};
             aboutMenuItem.Click += (s, e) => NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
             ApplicationBar.MenuItems.Add(aboutMenuItem);
 
@@ -346,10 +350,7 @@ namespace ImageSequencer
 
         private void ShowProgressIndicator(String text)
         {
-            SystemTray.ProgressIndicator = new ProgressIndicator();
-            SystemTray.ProgressIndicator.Text = text;
-            SystemTray.ProgressIndicator.IsIndeterminate = true;
-            SystemTray.ProgressIndicator.IsVisible = true;
+            SystemTray.ProgressIndicator = new ProgressIndicator {Text = text, IsIndeterminate = true, IsVisible = true};
         }
 
         private void HideProgressIndicator()

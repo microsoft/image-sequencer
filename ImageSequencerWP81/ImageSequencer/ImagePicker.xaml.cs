@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 using System.Collections.ObjectModel;
-using System.IO.IsolatedStorage;
 using System.Windows.Media.Imaging;
 using System.IO;
 using Windows.Storage;
@@ -52,15 +48,17 @@ namespace ImageSequencer
             var files = await KnownFolders.PicturesLibrary.GetFilesAsync();
             foreach (StorageFile storageFile in files)
             {
-                var pattern = "ImageSequencer\\.\\d+\\.gif";
+                const string pattern = "ImageSequencer\\.\\d+\\.gif";
                 if (System.Text.RegularExpressions.Regex.IsMatch(storageFile.Name, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
                 {
                     var stream = (await storageFile.OpenReadAsync()).AsStreamForRead();
                     BitmapImage bitmapImage = new BitmapImage();
                     bitmapImage.SetSource(stream);
-                    GifThumbnail gifThumbnail = new GifThumbnail();
-                    gifThumbnail.BitmapImage = bitmapImage;
-                    gifThumbnail.FileName = storageFile.Name;
+                    GifThumbnail gifThumbnail = new GifThumbnail
+                    {
+                        BitmapImage = bitmapImage,
+                        FileName = storageFile.Name
+                    };
                     Gifs.Add(gifThumbnail);
                 }
             }
@@ -77,15 +75,24 @@ namespace ImageSequencer
 
         public void Thumbnail_Tap(object sender, EventArgs e)
         {
-            Uri uri = (sender as Image).DataContext as Uri;
-            int sequenceId = Sequences.IndexOf(uri) + 1;
-            NavigationService.Navigate(new Uri("/MainPage.xaml?sequenceId=" + sequenceId, UriKind.Relative));
+            var image = sender as Image;
+            if (image != null)
+            {
+                Uri uri = image.DataContext as Uri;
+                int sequenceId = Sequences.IndexOf(uri) + 1;
+                NavigationService.Navigate(new Uri("/MainPage.xaml?sequenceId=" + sequenceId, UriKind.Relative));
+            }
         }
 
         public void Gif_Tap(object sender, EventArgs e)
         {
-            GifThumbnail thumbnail = (sender as Button).DataContext as GifThumbnail;
-            NavigationService.Navigate(new Uri("/GifViewer.xaml?imageUri=" + thumbnail.FileName, UriKind.Relative));
+            var button = sender as Button;
+            if (button != null)
+            {
+                var thumbnail = button.DataContext as GifThumbnail;
+                if (thumbnail != null)
+                    NavigationService.Navigate(new Uri("/GifViewer.xaml?imageUri=" + thumbnail.FileName, UriKind.Relative));
+            }
         }
 
         public void About_Click(object sender, EventArgs e)
@@ -95,9 +102,13 @@ namespace ImageSequencer
 
         public async void Delete_Click(object sender, EventArgs e)
         {
-            var filename = ((sender as MenuItem).DataContext as GifThumbnail).FileName;
-            var storageFile = await KnownFolders.PicturesLibrary.GetFileAsync(filename);
-            await storageFile.DeleteAsync();
+            var menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                var filename = (menuItem.DataContext as GifThumbnail).FileName;
+                var storageFile = await KnownFolders.PicturesLibrary.GetFileAsync(filename);
+                await storageFile.DeleteAsync();
+            }
             PopulateGifs();
         }
 
