@@ -51,13 +51,13 @@ namespace ImageSequencer
             IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
             String[] fileNames = store.GetFileNames();
 
-            foreach (String filename in fileNames)
+            foreach (var filename in fileNames)
             {
                 using (var sourceFile = store.OpenFile(filename, FileMode.Open, FileAccess.Read))
                 {
-                    BitmapImage bitmapImage = new BitmapImage();
+                    var bitmapImage = new BitmapImage();
                     bitmapImage.SetSource(sourceFile);
-                    GifThumbnail gifThumbnail = new GifThumbnail();
+                    var gifThumbnail = new GifThumbnail();
                     gifThumbnail.BitmapImage = bitmapImage;
                     gifThumbnail.FileName = filename;
                     Gifs.Add(gifThumbnail);
@@ -76,15 +76,24 @@ namespace ImageSequencer
 
         public void Thumbnail_Tap(object sender, EventArgs e)
         {
-            Uri uri = (sender as Image).DataContext as Uri;
-            int sequenceId = Sequences.IndexOf(uri) + 1;
-            NavigationService.Navigate(new Uri("/MainPage.xaml?sequenceId=" + sequenceId, UriKind.Relative));
+            var image = sender as Image;
+            if (image != null)
+            {
+                Uri uri = image.DataContext as Uri;
+                int sequenceId = Sequences.IndexOf(uri) + 1;
+                NavigationService.Navigate(new Uri("/MainPage.xaml?sequenceId=" + sequenceId, UriKind.Relative));
+            }
         }
 
         public void Gif_Tap(object sender, EventArgs e)
         {
-            GifThumbnail thumbnail = (sender as Button).DataContext as GifThumbnail;
-            NavigationService.Navigate(new Uri("/GifViewer.xaml?imageUri=" + thumbnail.FileName, UriKind.Relative));
+            var button = sender as Button;
+            if (button != null)
+            {
+                GifThumbnail thumbnail = button.DataContext as GifThumbnail;
+                if (thumbnail != null)
+                    NavigationService.Navigate(new Uri("/GifViewer.xaml?imageUri=" + thumbnail.FileName, UriKind.Relative));
+            }
         }
 
         public void About_Click(object sender, EventArgs e)
@@ -95,7 +104,13 @@ namespace ImageSequencer
         public void Delete_Click(object sender, EventArgs e)
         {
             IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-            store.DeleteFile(((sender as MenuItem).DataContext as GifThumbnail).FileName);
+            var menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                var gifThumbnail = menuItem.DataContext as GifThumbnail;
+                if (gifThumbnail != null)
+                    store.DeleteFile(gifThumbnail.FileName);
+            }
             PopulateGifs();
         }
 

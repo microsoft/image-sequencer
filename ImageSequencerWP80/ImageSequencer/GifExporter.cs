@@ -1,8 +1,6 @@
 ﻿using Nokia.Graphics.Imaging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -12,8 +10,6 @@ using System.IO;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using Nokia.InteropServices.WindowsRuntime;
-using System.Threading;
-using Windows.Storage;
 
 namespace ImageSequencer
 {
