@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Windows
+VisualStudioVersion = 12.0.30324.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageSequencer", "ImageSequencer", "{57BAF6C9-7CB4-4E48-9B90-39C67ED15815}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ImageSequencer.Shared", "ImageSequencer\ImageSequencer.Shared\ImageSequencer.Shared.shproj", "{5F8CC95D-790C-4D28-A7FA-8D9C08D6BB25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageSequencer.WindowsPhone", "ImageSequencer\ImageSequencer.WindowsPhone\ImageSequencer.WindowsPhone.csproj", "{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ImageSequencer\ImageSequencer.Shared\ImageSequencer.Shared.projitems*{5f8cc95d-790c-4d28-a7fa-8d9c08d6bb25}*SharedItemsImports = 13
+		ImageSequencer\ImageSequencer.Shared\ImageSequencer.Shared.projitems*{22c3f30a-9c25-4dcb-a3ce-9acba1bd2098}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|ARM.ActiveCfg = Debug|ARM
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|ARM.Build.0 = Debug|ARM
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|ARM.Deploy.0 = Debug|ARM
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|x86.ActiveCfg = Debug|x86
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|x86.Build.0 = Debug|x86
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Debug|x86.Deploy.0 = Debug|x86
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|ARM.ActiveCfg = Release|ARM
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|ARM.Build.0 = Release|ARM
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|ARM.Deploy.0 = Release|ARM
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|x64.ActiveCfg = Release|Any CPU
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|x86.ActiveCfg = Release|x86
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|x86.Build.0 = Release|x86
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F8CC95D-790C-4D28-A7FA-8D9C08D6BB25} = {57BAF6C9-7CB4-4E48-9B90-39C67ED15815}
+		{22C3F30A-9C25-4DCB-A3CE-9ACBA1BD2098} = {57BAF6C9-7CB4-4E48-9B90-39C67ED15815}
+	EndGlobalSection
+EndGlobal
