@@ -150,7 +150,7 @@
     <value>Image Sequencer is an example application demonstrating the use of Nokia Imaging SDK’s Image Aligner and Gif Renderer APIs for creating cinemagraph-style animations in animated GIF format.</value>
   </data>
   <data name="AboutPage_Hyperlink_Project" xml:space="preserve">
-    <value>https://github.com/nokia-developer/image-sequencer</value>
+    <value>https://github.com/Microsoft/image-sequencer</value>
   </data>
   <data name="AboutPage_ProjectRun" xml:space="preserve">
     <value>For more information and application source code go to {0}.</value>

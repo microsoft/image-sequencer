@@ -4,7 +4,7 @@
 Image Sequencer is an example application demonstrating the use of Nokia Imaging SDK’s Image Aligner and Gif Renderer APIs for creating cinemagraph-style animations in animated GIF format. The application has a set of hard coded image sequences to be used for basis of the alignment and animation. User can manipulate the animation by limiting the animated area to a small rectangular section, and by stabilizing the images in order to eliminate camera shake. Animations with still backgrounds and minor repeated movement are commonly called cinemagraphs.
 
 This example application is hosted in GitHub:
-https://github.com/nokia-developer/image-sequencer/
+https://github.com/Microsoft/image-sequencer/
 
 For more information on implementation visit Nokia Lumia Developer's Library: http://developer.nokia.com/resources/library/Lumia/nokia-imaging-sdk/sample-projects/image-sequencer.html
 
@@ -81,7 +81,7 @@ License
 -------
 
 See the license text file delivered with this project:
-https://github.com/nokia-developer/image-sequencer/blob/master/License.txt
+https://github.com/Microsoft/image-sequencer/blob/master/License.txt
 
 
 Downloads
@@ -89,8 +89,8 @@ Downloads
 
 | Project | Release | Download |
 | ------- | --------| -------- |
-| Image Sequencer | v1.1 | [image-sequencer-1.1.zip](https://github.com/nokia-developer/image-sequencer/archive/1.1.zip) |
-| Image Sequencer | v1.0 | [image-sequencer-1.0.zip](https://github.com/nokia-developer/image-sequencer/archive/1.0.zip) |
+| Image Sequencer | v1.1 | [image-sequencer-1.1.zip](https://github.com/Microsoft/image-sequencer/archive/1.1.zip) |
+| Image Sequencer | v1.0 | [image-sequencer-1.0.zip](https://github.com/Microsoft/image-sequencer/archive/1.0.zip) |
 
 
 Version history

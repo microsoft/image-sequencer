@@ -70,7 +70,7 @@ namespace ImageSequencer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/nokia-developer/image-sequencer.
+        ///   Looks up a localized string similar to https://github.com/Microsoft/image-sequencer.
         /// </summary>
         public static string AboutPage_Hyperlink_Project {
             get {
