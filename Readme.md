@@ -6,7 +6,7 @@ Image Sequencer is an example application demonstrating the use of Nokia Imaging
 This example application is hosted in GitHub:
 https://github.com/Microsoft/image-sequencer/
 
-For more information on implementation visit Nokia Lumia Developer's Library: http://developer.nokia.com/resources/library/Lumia/nokia-imaging-sdk/sample-projects/image-sequencer.html
+For more information on implementation visit Lumia Developer's Library: http://developer.nokia.com/resources/library/Lumia/nokia-imaging-sdk/sample-projects/image-sequencer.html
 
 Developed with Microsoft Visual Studio Express 2012 for Windows Phone.
 
