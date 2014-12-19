@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Nokia.Graphics.Imaging;
+using Lumia.Imaging;
 using ImageSequencer.Resources;
 using System.Windows.Threading;
 using System.Windows.Media;
@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Lumia.Imaging.Transforms;
 
 namespace ImageSequencer
 {

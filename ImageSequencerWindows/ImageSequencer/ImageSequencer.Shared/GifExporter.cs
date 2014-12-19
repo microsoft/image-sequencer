@@ -1,4 +1,4 @@
-﻿using Nokia.Graphics.Imaging;
+﻿using Lumia.Imaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.IO;
-using Nokia.InteropServices.WindowsRuntime;
+using Lumia.InteropServices.WindowsRuntime;
 using System.Threading;
 using Windows.Storage;
 using Windows.Foundation;
@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
+using Lumia.Imaging.Compositing;
+using Lumia.Imaging.Transforms;
 
 namespace ImageSequencer
 {

@@ -1,0 +1,7 @@
+*/Bin
+*/obj
+*/packages/
+*.v12.suo
+*.chm
+bin/
+obj/
