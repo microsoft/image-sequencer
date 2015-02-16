@@ -84,15 +84,6 @@ See the license text file delivered with this project:
 https://github.com/Microsoft/image-sequencer/blob/master/License.txt
 
 
-Downloads
----------
-
-| Project | Release | Download |
-| ------- | --------| -------- |
-| Image Sequencer | v1.1 | [image-sequencer-1.1.zip](https://github.com/Microsoft/image-sequencer/archive/1.1.zip) |
-| Image Sequencer | v1.0 | [image-sequencer-1.0.zip](https://github.com/Microsoft/image-sequencer/archive/1.0.zip) |
-
-
 Version history
 ---------------
 
