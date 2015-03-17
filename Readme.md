@@ -6,7 +6,7 @@ Image Sequencer is an example application demonstrating the use of Lumia Imaging
 This example application is hosted in GitHub:
 https://github.com/Microsoft/image-sequencer/
 
-For more information on implementation visit Lumia Developer's Library: http://dev.windows.com/en-us/featured/lumia
+For more information on implementation visit Lumia Developer's Library: http://go.microsoft.com/fwlink/?LinkId=528374
 
 Developed with Microsoft Visual Studio Express 2012 for Windows Phone.
 
